@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Premium Light Mode Core Styles */
+body {
+  background: linear-gradient(135deg, #ffffff 0%, #f4f9ff 50%, #eef6ff 100%) !important;
+  color: #1e293b;
+  min-height: 100vh;
+}
+
+@layer components {
+  /* Premium Glassmorphic Card panel - Redefined for light theme */
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-md border border-slate-200/70 shadow-lg shadow-blue-900/5;
+  }
+
+  /* Stat details */
+  .stat-card-gradient {
+    @apply relative overflow-hidden bg-gradient-to-br from-white via-blue-50/20 to-blue-50/50 border border-slate-200;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2 rounded-lg transition-all duration-200 shadow-lg shadow-blue-500/10 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none;
+  }
+  
+  .btn-secondary {
+    @apply bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-medium px-4 py-2 rounded-lg transition-all duration-200 active:scale-[0.98] disabled:opacity-50;
+  }
+
+  .btn-danger {
+    @apply bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-medium px-4 py-2 rounded-lg transition-all duration-200 active:scale-[0.98] disabled:opacity-50;
+  }
+
+  /* Form Inputs */
+  .form-input {
+    @apply bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-blue-500 placeholder-slate-400 w-full transition-all;
+  }
+
+  /* Scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-100;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full hover:bg-slate-400;
+  }
+}
+
+/* Global Dark-to-Light overrides to change elements with hardcoded Tailwind colors */
+.bg-slate-950, .min-h-screen {
+  background: linear-gradient(135deg, #ffffff 0%, #f4f9ff 50%, #eef6ff 100%) !important;
+  color: #1e293b !important;
+}
+
+.bg-slate-950\/40, .bg-slate-900\/60, .bg-slate-950\/20, .bg-slate-900\/50, .bg-slate-900\/40 {
+  background-color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.bg-slate-900, .bg-slate-950 {
+  background-color: #ffffff !important;
+}
+
+/* Text color overrides */
+.text-white, h1, h2, h3, h4, .text-slate-100, .text-slate-200, .text-slate-300, .text-slate-350 {
+  color: #0f172a !important;
+}
+
+.text-slate-400 {
+  color: #475569 !important;
+}
+
+.text-slate-500, .text-slate-600 {
+  color: #64748b !important;
+}
+
+/* Specific component fixes for light theme */
+.border-slate-800, .border-slate-900, .border-slate-700, .border-indigo-500\/20, .border-blue-500\/25 {
+  border-color: rgba(226, 232, 240, 0.95) !important;
+}
+
+/* Navigation overrides */
+nav, .bg-slate-950\/80 {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9) !important;
+}
+
+nav * {
+  color: #1e293b !important;
+}
+
+nav a:hover, nav button:hover {
+  background-color: rgba(241, 245, 249, 0.9) !important;
+}
+
+/* Sidebar and general layouts */
+.hover\:bg-slate-900\/40:hover, .hover\:bg-slate-900\/50:hover, .hover\:bg-slate-900:hover, .bg-slate-950\/40 {
+  background-color: rgba(241, 245, 249, 0.8) !important;
+}
+
+/* Form input adjustments */
+input, select, textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+input::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Card details adjustments for text contrast */
+.text-slate-300, .text-slate-350 {
+  color: #334155 !important;
+}
+
+.bg-slate-950\/40 {
+  background-color: rgba(241, 245, 249, 0.5) !important;
+}
+
+/* Alert styles adjustments */
+.bg-red-950\/20 {
+  background-color: rgba(254, 242, 242, 0.85) !important;
+  border-color: rgba(239, 68, 68, 0.25) !important;
+}
+.bg-emerald-500\/10 {
+  background-color: rgba(209, 250, 229, 0.7) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+/* Footer overrides */
+footer {
+  background-color: rgba(255, 255, 255, 0.7) !important;
+  border-top: 1px solid rgba(226, 232, 240, 0.8) !important;
+  color: #64748b !important;
+}

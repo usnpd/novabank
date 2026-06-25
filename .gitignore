@@ -1,0 +1,31 @@
+# Target / Build Directories
+backend/target/
+frontend/dist/
+frontend/node_modules/
+
+# Local H2 Database files
+data/
+backend/data/
+*.mv.db
+*.trace.db
+
+# IDE and Project Settings
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln
+*.docstates
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Environment Files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
