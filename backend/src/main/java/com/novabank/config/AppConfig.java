@@ -27,7 +27,7 @@ public class AppConfig {
             log.warn("GEMINI_API_KEY environment variable is missing or empty. " +
                      "Using a placeholder key to allow application startup. " +
                      "AI features will fall back to local rule-based simulation.");
-            keyToUse = "AIzaSyDummyKeyPlaceholderToAllowStartup";
+            keyToUse = "DUMMY_API_KEY_PLACEHOLDER";
         } else {
             log.info("Configuring googleGenAiClient with provided API key.");
         }
