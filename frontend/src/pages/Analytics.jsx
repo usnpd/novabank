@@ -51,7 +51,7 @@ const Analytics = () => {
       <div className="flex justify-between items-center mb-8 border-b border-slate-800 pb-5">
         <div>
           <h2 className="text-xl font-bold text-white tracking-tight">AI Wealth Intelligence</h2>
-          <p className="text-xs text-slate-500 mt-1">Predictive cash flow modeling and portfolio diagnostics powered by Ollama Llama 3</p>
+          <p className="text-xs text-slate-500 mt-1">Predictive cash flow modeling and portfolio diagnostics powered by Mistral AI</p>
         </div>
         <button
           onClick={() => { setLoading(true); fetchAnalyticsData(); }}

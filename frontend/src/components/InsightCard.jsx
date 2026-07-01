@@ -30,7 +30,7 @@ const InsightCard = ({ insight }) => {
           </div>
           <div>
             <h3 className="font-extrabold text-sm text-white">AI Portfolio Diagnostics</h3>
-            <span className="text-[10px] text-slate-500 block mt-0.5">Ollama Llama 3 Advisory</span>
+            <span className="text-[10px] text-slate-500 block mt-0.5">Mistral AI Advisory</span>
           </div>
         </div>
 
