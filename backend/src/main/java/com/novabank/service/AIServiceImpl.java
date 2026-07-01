@@ -37,12 +37,24 @@ public class AIServiceImpl implements AIService {
         Map<String, ChatModel> chatModels = applicationContext.getBeansOfType(ChatModel.class);
         if (chatModels == null || chatModels.isEmpty()) return null;
 
+        String provider = aiProvider;
+        if (provider == null || provider.trim().isEmpty()) {
+            provider = "mistral";
+        }
+        provider = provider.trim().toLowerCase();
+
         for (Map.Entry<String, ChatModel> entry : chatModels.entrySet()) {
             String beanName = entry.getKey().toLowerCase();
-            if (aiProvider.equalsIgnoreCase("mistral") && beanName.contains("mistral")) {
+            if (provider.equals("mistral") && beanName.contains("mistral")) {
                 return entry.getValue();
             }
-            if (aiProvider.equalsIgnoreCase("google") && (beanName.contains("google") || beanName.contains("genai"))) {
+            if (provider.equals("google") && (beanName.contains("google") || beanName.contains("genai"))) {
+                return entry.getValue();
+            }
+        }
+        
+        for (Map.Entry<String, ChatModel> entry : chatModels.entrySet()) {
+            if (entry.getKey().toLowerCase().contains("mistral")) {
                 return entry.getValue();
             }
         }
@@ -268,6 +280,10 @@ public class AIServiceImpl implements AIService {
 
     @Override
     public String getActiveProvider() {
-        return this.aiProvider;
+        String provider = this.aiProvider;
+        if (provider == null || provider.trim().isEmpty()) {
+            return "mistral (defaulted from blank)";
+        }
+        return provider;
     }
 }
