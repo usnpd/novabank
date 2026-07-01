@@ -14,6 +14,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.ai.chat.model.ChatModel;
+import java.util.Map;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +25,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/ai")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AIController {
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Autowired
     private AIService aiService;
@@ -78,7 +85,8 @@ public class AIController {
         String email = getAuthenticatedUserEmail();
         status.put("user", email);
         
-        status.put("configuredProvider", System.getenv("NOVABANK_AI_PROVIDER") != null ? System.getenv("NOVABANK_AI_PROVIDER") : "mistral (default)");
+        String configuredProvider = System.getenv("NOVABANK_AI_PROVIDER") != null ? System.getenv("NOVABANK_AI_PROVIDER") : "mistral";
+        status.put("configuredProvider", configuredProvider);
         
         String mistralKey = System.getenv("MISTRAL_API_KEY");
         String geminiKey = System.getenv("GEMINI_API_KEY");
@@ -98,6 +106,38 @@ public class AIController {
         } catch (Exception e) {
             status.put("status", "ERROR");
             status.put("errorMessage", e.getMessage());
+        }
+
+        try {
+            Map<String, ChatModel> chatModels = applicationContext.getBeansOfType(ChatModel.class);
+            ChatModel activeModel = null;
+            
+            for (Map.Entry<String, ChatModel> entry : chatModels.entrySet()) {
+                String beanName = entry.getKey().toLowerCase();
+                if (configuredProvider.equalsIgnoreCase("mistral") && beanName.contains("mistral")) {
+                    activeModel = entry.getValue();
+                } else if (configuredProvider.equalsIgnoreCase("google") && (beanName.contains("google") || beanName.contains("genai"))) {
+                    activeModel = entry.getValue();
+                }
+            }
+            if (activeModel == null && !chatModels.isEmpty()) {
+                activeModel = chatModels.values().iterator().next();
+            }
+            
+            if (activeModel != null) {
+                status.put("resolvedModelBean", activeModel.getClass().getName());
+                long startCall = System.currentTimeMillis();
+                String raw = activeModel.call("Respond with only the word OK");
+                status.put("rawCallResult", raw);
+                status.put("callTimeMs", System.currentTimeMillis() - startCall);
+            } else {
+                status.put("resolvedModelBean", "NONE");
+            }
+        } catch (Exception e) {
+            status.put("directCallError", e.toString());
+            java.io.StringWriter sw = new java.io.StringWriter();
+            e.printStackTrace(new java.io.PrintWriter(sw));
+            status.put("directCallStackTrace", sw.toString());
         }
         
         return ResponseEntity.ok(status);
