@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/ai")
-@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AIController {
 
@@ -40,6 +39,7 @@ public class AIController {
     }
 
     @GetMapping("/insights")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<AIInsightResponse> getInsights() {
         String email = getAuthenticatedUserEmail();
         
@@ -55,6 +55,7 @@ public class AIController {
     }
 
     @GetMapping("/cashflow")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<CashFlowResponse> getCashFlowProjections() {
         String email = getAuthenticatedUserEmail();
         CashFlowResponse response = cashFlowService.predictCashFlow(email);
@@ -62,6 +63,7 @@ public class AIController {
     }
 
     @PostMapping("/reconcile")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<ReconciliationResponse> reconcileStatement(
             @RequestParam String month1,
             @RequestParam String month2) {
