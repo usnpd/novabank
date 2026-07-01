@@ -130,6 +130,42 @@ public class AIController {
                 String raw = activeModel.call("Respond with only the word OK");
                 status.put("rawCallResult", raw);
                 status.put("callTimeMs", System.currentTimeMillis() - startCall);
+                
+                String systemPrompt = "You are a real-time banking fraud analysis engine. " +
+                        "Analyze the transaction details and return ONLY a raw JSON object (no markdown backticks, no other text): " +
+                        "{\n" +
+                        "  \"transactionReference\": \"string\",\n" +
+                        "  \"fraudScore\": 0.00, // 0.0 to 1.0\n" +
+                        "  \"fraudRisk\": \"LOW | MEDIUM | HIGH\",\n" +
+                        "  \"anomalyReason\": \"string explaining details\",\n" +
+                        "  \"isFlagged\": true | false,\n" +
+                        "  \"rulesTriggered\": [\"string\"]\n" +
+                        "}";
+                String txnDetails = "id=1, referenceNumber=TEST, amount=100.00, transactionType=DEBIT, category=GROCERIES, description=test";
+                String combinedPrompt = systemPrompt + "\n\nUser Input:\n" + txnDetails;
+                
+                String rawAnalyze = activeModel.call(combinedPrompt);
+                status.put("rawAnalyzeResponse", rawAnalyze);
+                
+                String cleaned = rawAnalyze != null ? rawAnalyze.trim() : "";
+                if (cleaned.startsWith("```json")) {
+                    cleaned = cleaned.substring(7);
+                } else if (cleaned.startsWith("```")) {
+                    cleaned = cleaned.substring(3);
+                }
+                if (cleaned.endsWith("```")) {
+                    cleaned = cleaned.substring(0, cleaned.length() - 3);
+                }
+                cleaned = cleaned.trim();
+                status.put("cleanedAnalyzeResponse", cleaned);
+                
+                try {
+                    com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+                    com.novabank.payload.response.FraudAnalysisResponse parsed = mapper.readValue(cleaned, com.novabank.payload.response.FraudAnalysisResponse.class);
+                    status.put("parsedAnalyzeResult", parsed);
+                } catch (Exception e) {
+                    status.put("parseError", e.toString());
+                }
             } else {
                 status.put("resolvedModelBean", "NONE");
             }
