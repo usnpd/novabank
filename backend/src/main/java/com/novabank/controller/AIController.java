@@ -69,4 +69,35 @@ public class AIController {
         ReconciliationResponse response = reconciliationService.reconcileMonthlySpending(email, month1, month2);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/test")
+    public ResponseEntity<java.util.Map<String, Object>> testAI() {
+        java.util.Map<String, Object> status = new java.util.HashMap<>();
+        String email = getAuthenticatedUserEmail();
+        status.put("user", email);
+        
+        status.put("configuredProvider", System.getenv("NOVABANK_AI_PROVIDER") != null ? System.getenv("NOVABANK_AI_PROVIDER") : "mistral (default)");
+        
+        String mistralKey = System.getenv("MISTRAL_API_KEY");
+        String geminiKey = System.getenv("GEMINI_API_KEY");
+        status.put("mistralKeyPresent", mistralKey != null && !mistralKey.trim().isEmpty());
+        status.put("geminiKeyPresent", geminiKey != null && !geminiKey.trim().isEmpty());
+        
+        try {
+            long startTime = System.currentTimeMillis();
+            com.novabank.payload.response.FraudAnalysisResponse response = aiService.analyzeTransaction("id=1, referenceNumber=TEST, amount=100.00, transactionType=DEBIT, category=GROCERIES, description=test");
+            long duration = System.currentTimeMillis() - startTime;
+            
+            status.put("status", "SUCCESS");
+            status.put("responseTimeMs", duration);
+            status.put("anomalyReason", response.getAnomalyReason());
+            boolean isMock = "No anomalous patterns identified by local checks.".equals(response.getAnomalyReason()) || "Large transaction size flag triggered.".equals(response.getAnomalyReason());
+            status.put("isMockFallback", isMock);
+        } catch (Exception e) {
+            status.put("status", "ERROR");
+            status.put("errorMessage", e.getMessage());
+        }
+        
+        return ResponseEntity.ok(status);
+    }
 }
