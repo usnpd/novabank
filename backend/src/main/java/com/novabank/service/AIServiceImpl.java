@@ -265,4 +265,9 @@ public class AIServiceImpl implements AIService {
                 "* Entertainment budget was significantly below budget (-30%), indicating positive discipline.\n" +
                 "* Grocery expenses had a minor 5% matched variance, matching expectations.";
     }
+
+    @Override
+    public String getActiveProvider() {
+        return this.aiProvider;
+    }
 }

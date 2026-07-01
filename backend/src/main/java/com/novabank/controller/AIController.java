@@ -87,6 +87,7 @@ public class AIController {
         
         String configuredProvider = System.getenv("NOVABANK_AI_PROVIDER") != null ? System.getenv("NOVABANK_AI_PROVIDER") : "mistral";
         status.put("configuredProvider", configuredProvider);
+        status.put("actualAIServiceProvider", aiService.getActiveProvider());
         
         String mistralKey = System.getenv("MISTRAL_API_KEY");
         String geminiKey = System.getenv("GEMINI_API_KEY");

@@ -9,4 +9,5 @@ public interface AIService {
     AIInsightResponse generateMonthlyInsight(String portfolioSummary);
     CashFlowResponse predictCashFlow(String historicalData);
     String reconcileTransactions(String varianceReport);
+    String getActiveProvider();
 }
